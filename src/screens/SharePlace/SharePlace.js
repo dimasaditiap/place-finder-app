@@ -6,14 +6,29 @@ import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import { addPlace } from '../../store/actions/index';
 
 class SharePlaceScreen extends Component {
-    placeAddedHandler = placeName => {
-        this.props.onAddPlace(placeName);
+    constructor(props) {
+        super(props);
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
-    render () {
+    onNavigatorEvent = event => {
+        if (event.type === 'NavBarButtonPress') {
+            if (event.id === 'sideDrawerToggle') {
+                this.props.navigator.toggleDrawer({
+                    side: 'left'
+                });
+            }
+        }
+    };
+
+    placeAddedHandler = placeName => {
+        this.props.onAddPlace(placeName);
+    };
+
+    render() {
         return (
             <View>
-                <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
+                <PlaceInput onPlaceAdded={this.placeAddedHandler} />
             </View>
         );
     }
@@ -21,8 +36,11 @@ class SharePlaceScreen extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddPlace: (placeName) => dispatch(addPlace(placeName))
+        onAddPlace: placeName => dispatch(addPlace(placeName))
     };
 };
 
-export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+export default connect(
+    null,
+    mapDispatchToProps
+)(SharePlaceScreen);

@@ -5,40 +5,43 @@ import AuthScreen from './src/screens/Auth/Auth';
 import SharePlaceScreen from './src/screens/SharePlace/SharePlace';
 import FindPlaceScreen from './src/screens/FindPlace/FindPlace';
 import PlaceDetailScreen from './src/screens/PlaceDetail/PlaceDetail';
+import SideDrawer from './src/screens/SideDrawer/SideDrawer';
+
 import configureStore from './src/store/configureStore';
 
 const store = configureStore();
 
 // Register Screens
 Navigation.registerComponent(
-    'awesome-places.AuthScreen',
+    'place-finder.AuthScreen',
     () => AuthScreen,
     store,
     Provider
 );
 Navigation.registerComponent(
-    'awesome-places.SharePlaceScreen',
+    'place-finder.SharePlaceScreen',
     () => SharePlaceScreen,
     store,
     Provider
 );
 Navigation.registerComponent(
-    'awesome-places.FindPlaceScreen',
+    'place-finder.FindPlaceScreen',
     () => FindPlaceScreen,
     store,
     Provider
 );
 Navigation.registerComponent(
-    'awesome-places.PlaceDetailScreen',
+    'place-finder.PlaceDetailScreen',
     () => PlaceDetailScreen,
     store,
     Provider
 );
+Navigation.registerComponent('place-finder.SideDrawer', () => SideDrawer);
 
 // Start a App
 Navigation.startSingleScreenApp({
     screen: {
-        screen: 'awesome-places.AuthScreen',
+        screen: 'place-finder.AuthScreen',
         title: 'Login'
     }
 });
