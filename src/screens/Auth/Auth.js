@@ -23,12 +23,18 @@ class AuthScreen extends Component {
 
     render() {
         return (
-            <ImageBackground source={bgImage} style={styles.backgroundImage}>
+            <ImageBackground
+                source={bgImage}
+                style={styles.backgroundImage}
+                imageStyle={{ resizeMode: 'stretch' }}>
                 <View style={styles.container}>
                     <MainText>
                         <HeadingText>Please Log In</HeadingText>
                     </MainText>
-                    <BackgroundedButton color="#29aaf4">
+                    <BackgroundedButton
+                        bgColor="#29aaf4"
+                        color="white"
+                        brColor="transparent">
                         Login Here
                     </BackgroundedButton>
                     <View style={styles.inputContainer}>
@@ -46,7 +52,9 @@ class AuthScreen extends Component {
                         />
                     </View>
                     <BackgroundedButton
-                        color="#29aaf4"
+                        bgColor="#29aaf4"
+                        color="white"
+                        brColor="transparent"
                         onPress={this.loginHandler}>
                         Submit
                     </BackgroundedButton>
