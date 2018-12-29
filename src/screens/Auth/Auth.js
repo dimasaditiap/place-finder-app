@@ -23,6 +23,29 @@ class AuthScreen extends Component {
             pwContainerDirection: 'column',
             pwContainerJustifyContent: 'flex-start',
             pwWrapperWidth: '100%'
+        },
+        controls: {
+            email: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    isEmail: true
+                }
+            },
+            password: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    minLength: 6
+                }
+            },
+            confPassword: {
+                value: '',
+                valid: false,
+                validationRules: {
+                    equalTo: 'password'
+                }
+            }
         }
     };
 

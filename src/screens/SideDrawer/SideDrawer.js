@@ -26,7 +26,7 @@ class SideDrawer extends Component {
                                     : 'ios-log-out'
                             }
                             size={30}
-                            color="#aaa"
+                            color="#29aaf4"
                             style={styles.drawerItemIcon}
                         />
                         <Text>Sign Out</Text>

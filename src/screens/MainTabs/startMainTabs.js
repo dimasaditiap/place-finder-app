@@ -50,10 +50,16 @@ const startTabs = () => {
                     }
                 }
             ],
+            tabStyle: {
+                tabBarSelectedButtonColor: '#29aaf4'
+            },
             drawer: {
                 left: {
                     screen: 'place-finder.SideDrawer'
                 }
+            },
+            appStyle: {
+                tabBarSelectedButtonColor: '#29aaf4'
             }
         });
     });

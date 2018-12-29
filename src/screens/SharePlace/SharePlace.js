@@ -21,6 +21,10 @@ import PickLocation from '../../components/PickLocation/PickLocation';
 import imagePlaceHolder from '../../assets/beautiful-place.jpg';
 
 class SharePlaceScreen extends Component {
+    static navigatorStyle = {
+        navBarButtonColor: '#29aaf4'
+    };
+    
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
