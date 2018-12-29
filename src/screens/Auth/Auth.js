@@ -17,6 +17,8 @@ import BackgroundedButton from '../../components/UI/BackgrounedButton/Button';
 
 import bgImage from '../../assets/background.jpg';
 
+import validate from '../../utility/validation';
+
 class AuthScreen extends Component {
     state = {
         styles: {
@@ -77,6 +79,49 @@ class AuthScreen extends Component {
         startMainTabs();
     };
 
+    updateInput = (key, value) => {
+        let conValue = {};
+        if (this.state.controls[key].validationRules.equalTo) {
+            const eqControl = this.state.controls[key].validationRules.equalTo;
+            const equalTo = this.state.controls[eqControl].value;
+            conValue = {
+                ...conValue,
+                equalTo
+            };
+        }
+        if (key === 'password') {
+            conValue = { ...conValue, equalTo: value };
+        }
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    confPassword: {
+                        ...prevState.controls.confPassword,
+                        valid:
+                            key === 'password'
+                                ? validate(
+                                      prevState.controls.confPassword.value,
+                                      prevState.controls.confPassword
+                                          .validationRules,
+                                      conValue
+                                  )
+                                : prevState.controls.confPassword.valid
+                    },
+                    [key]: {
+                        ...prevState.controls[key],
+                        value,
+                        valid: validate(
+                            value,
+                            prevState.controls[key].validationRules,
+                            conValue
+                        )
+                    }
+                }
+            };
+        });
+    };
+
     render() {
         let headingText = null;
 
@@ -104,6 +149,8 @@ class AuthScreen extends Component {
                         <DefaultInput
                             placeholder="Email"
                             style={styles.input}
+                            value={this.state.controls.email.value}
+                            onChangeText={val => this.updateInput('email', val)}
                         />
                         <View
                             style={{
@@ -119,6 +166,10 @@ class AuthScreen extends Component {
                                 <DefaultInput
                                     placeholder="Password"
                                     style={styles.input}
+                                    value={this.state.controls.password.value}
+                                    onChangeText={val =>
+                                        this.updateInput('password', val)
+                                    }
                                 />
                             </View>
                             <View
@@ -128,6 +179,12 @@ class AuthScreen extends Component {
                                 <DefaultInput
                                     placeholder="Confirm Password"
                                     style={styles.input}
+                                    value={
+                                        this.state.controls.confPassword.value
+                                    }
+                                    onChangeText={val =>
+                                        this.updateInput('confPassword', val)
+                                    }
                                 />
                             </View>
                         </View>
