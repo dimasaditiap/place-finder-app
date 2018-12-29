@@ -5,7 +5,8 @@ import {
     Button,
     TextInput,
     StyleSheet,
-    ImageBackground
+    ImageBackground,
+    Dimensions
 } from 'react-native';
 
 import startMainTabs from '../MainTabs/startMainTabs';
@@ -17,20 +18,59 @@ import BackgroundedButton from '../../components/UI/BackgrounedButton/Button';
 import bgImage from '../../assets/background.jpg';
 
 class AuthScreen extends Component {
+    state = {
+        styles: {
+            pwContainerDirection: 'column',
+            pwContainerJustifyContent: 'flex-start',
+            pwWrapperWidth: '100%'
+        }
+    };
+
+    constructor(props) {
+        super(props);
+        Dimensions.addEventListener('change', this.updateStyles);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updateStyles);
+    }
+
+    updateStyles = dims => {
+        this.setState({
+            styles: {
+                pwContainerDirection:
+                    Dimensions.get('window').height > 500 ? 'column' : 'row',
+                pwContainerJustifyContent:
+                    Dimensions.get('window').height > 500
+                        ? 'flex-start'
+                        : 'space-between',
+                pwWrapperWidth:
+                    Dimensions.get('window').height > 500 ? '100%' : '45%'
+            }
+        });
+    };
+
     loginHandler = () => {
         startMainTabs();
     };
 
     render() {
+        let headingText = null;
+
+        if (Dimensions.get('window').height > 500) {
+            headingText = (
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
+            );
+        }
         return (
             <ImageBackground
                 source={bgImage}
                 style={styles.backgroundImage}
                 imageStyle={{ resizeMode: 'stretch' }}>
                 <View style={styles.container}>
-                    <MainText>
-                        <HeadingText>Please Log In</HeadingText>
-                    </MainText>
+                    {headingText}
                     <BackgroundedButton
                         bgColor="#29aaf4"
                         color="white"
@@ -42,14 +82,32 @@ class AuthScreen extends Component {
                             placeholder="Email"
                             style={styles.input}
                         />
-                        <DefaultInput
-                            placeholder="Password"
-                            style={styles.input}
-                        />
-                        <DefaultInput
-                            placeholder="Confirm Password"
-                            style={styles.input}
-                        />
+                        <View
+                            style={{
+                                flexDirection: this.state.styles
+                                    .pwContainerDirection,
+                                justifyContent: this.state.styles
+                                    .pwContainerJustifyContent
+                            }}>
+                            <View
+                                style={{
+                                    width: this.state.styles.pwWrapperWidth
+                                }}>
+                                <DefaultInput
+                                    placeholder="Password"
+                                    style={styles.input}
+                                />
+                            </View>
+                            <View
+                                style={{
+                                    width: this.state.styles.pwWrapperWidth
+                                }}>
+                                <DefaultInput
+                                    placeholder="Confirm Password"
+                                    style={styles.input}
+                                />
+                            </View>
+                        </View>
                     </View>
                     <BackgroundedButton
                         bgColor="#29aaf4"
