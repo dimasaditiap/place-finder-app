@@ -56,6 +56,7 @@ class FindPlaceScreen extends Component {
             duration: 500,
             useNativeDriver: true
         }).start();
+        this.setState({ placesLoaded: true });
     };
 
     render() {
@@ -111,7 +112,7 @@ class FindPlaceScreen extends Component {
 
         return (
             <View
-                style={this.state.placeLoaded ? null : styles.buttonContainer}>
+                style={this.state.placesLoaded ? null : styles.buttonContainer}>
                 {content}
             </View>
         );

@@ -145,6 +145,7 @@ class AuthScreen extends Component {
                 authMode: prevState.authMode === 'login' ? 'signup' : 'login'
             };
         });
+        this.updateStyles();
     };
 
     render() {
@@ -154,7 +155,10 @@ class AuthScreen extends Component {
         if (Dimensions.get('window').height > 500) {
             headingText = (
                 <MainText>
-                    <HeadingText>Please Log In</HeadingText>
+                    <HeadingText>
+                        Please{' '}
+                        {this.state.authMode !== 'login' ? 'Sign Up' : 'Login'}
+                    </HeadingText>
                 </MainText>
             );
         }
@@ -193,7 +197,7 @@ class AuthScreen extends Component {
                         bgColor="#29aaf4"
                         color="white"
                         brColor="transparent"
-                        onPress={this.state.switchAuthModeHandler}>
+                        onPress={this.switchAuthModeHandler}>
                         {this.state.authMode === 'login' ? 'Sign Up' : 'Login'}{' '}
                         Here
                     </BackgroundedButton>
@@ -210,7 +214,7 @@ class AuthScreen extends Component {
                                 touched={this.state.controls.email.touched}
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                keyboardType="emai-address"
+                                keyboardType="email-address"
                             />
                             <View
                                 style={{

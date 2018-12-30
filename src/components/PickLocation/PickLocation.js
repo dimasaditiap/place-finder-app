@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import BackgroundedButton from '../UI/BackgrounedButton/Button';
 import imagePlaceHolder from '../../assets/beautiful-place.jpg';
+import MapView from 'react-native-maps';
 
 class PickLocation extends Component {
+    state = {
+        focusedLoc: {
+            latitude: -6.89148,
+            longitude: 107.6107,
+            latitudeDelta: 0.0122,
+            longitudeDelta:
+                (Dimensions.get('window').width /
+                    Dimensions.get('window').height) *
+                0.0122
+        }
+    };
+
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.placeholder}>
-                    <Text>Map</Text>
-                </View>
+                <MapView
+                    initialRegion={this.state.focusedLoc}
+                    style={styles.map}
+                />
                 <View style={styles.button}>
                     <BackgroundedButton
                         color="#29aaf4"
@@ -28,12 +42,9 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center'
     },
-    placeholder: {
-        borderWidth: 1,
-        borderColor: 'black',
-        backgroundColor: '#eee',
-        width: '80%',
-        height: 150
+    map: {
+        width: '100%',
+        height: 250
     },
     button: {
         margin: 8

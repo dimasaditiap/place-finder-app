@@ -20,8 +20,6 @@ import PickLocation from '../../components/PickLocation/PickLocation';
 
 import imagePlaceHolder from '../../assets/beautiful-place.jpg';
 
-// import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert';
-
 class SharePlaceScreen extends Component {
     static navigatorStyle = {
         navBarButtonColor: '#29aaf4'
@@ -84,15 +82,6 @@ class SharePlaceScreen extends Component {
                         </BackgroundedButton>
                     </View>
                 </View>
-                {/* <SCLAlert
-                    theme="success"
-                    show={this.state.showNotif}
-                    title="Success"
-                    subtitle="Place successfully shared">
-                    <SCLAlertButton theme="success" onPress={this.handleClose}>
-                        Ok
-                    </SCLAlertButton>
-                </SCLAlert> */}
             </ScrollView>
         );
     }

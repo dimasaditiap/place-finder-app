@@ -6,8 +6,17 @@ const placeInput = props => (
     <DefaultInput
         placeholder="Place Name"
         value={props.placeName}
+        style={styles.input}
         onChangeText={props.onChangeText}
     />
 );
+
+const styles = StyleSheet.create({
+    input: {
+        marginLeft: '20%',
+        marginRight: '20%',
+        borderWidth: 3
+    }
+});
 
 export default placeInput;
