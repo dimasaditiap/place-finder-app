@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import BackgroundedButton from '../UI/BackgrounedButton/Button';
-import imagePlaceHolder from '../../assets/beautiful-place.jpg';
 import MapView from 'react-native-maps';
 
 class PickLocation extends Component {
@@ -34,6 +33,10 @@ class PickLocation extends Component {
                 },
                 chosedLoc: true
             };
+        });
+        this.props.onLocationPick({
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude
         });
     };
 

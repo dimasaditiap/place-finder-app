@@ -14,24 +14,39 @@ import { addPlace } from '../../store/actions/index';
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
-import BackgroundedButton from '../../components/UI/BackgrounedButton/Button';
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
-
-import imagePlaceHolder from '../../assets/beautiful-place.jpg';
+import validate from '../../utility/validation';
 
 class SharePlaceScreen extends Component {
     static navigatorStyle = {
         navBarButtonColor: '#29aaf4'
     };
 
+    state = {
+        controls: {
+            placeName: {
+                value: '',
+                valid: false,
+                touched: false,
+                validationRules: {
+                    notEmpty: true
+                }
+            },
+            location: {
+                value: null,
+                valid: false
+            },
+            image: {
+                value: null,
+                valid: false
+            }
+        }
+    };
+
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
-
-        this.state = {
-            showNotif: false
-        };
     }
 
     onNavigatorEvent = event => {
@@ -44,42 +59,84 @@ class SharePlaceScreen extends Component {
         }
     };
 
-    placeNameChangeHandler = placeName => {
-        this.setState({ placeName });
+    placeNameChangedHandler = val => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    placeName: {
+                        ...prevState.controls.placeName,
+                        value: val,
+                        valid: validate(
+                            val,
+                            prevState.controls.placeName.validationRules
+                        ),
+                        touched: true
+                    }
+                }
+            };
+        });
+    };
+
+    locationPickedHandler = location => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    location: {
+                        value: location,
+                        valid: true
+                    }
+                }
+            };
+        });
+    };
+
+    imagePickedHandler = image => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    image: {
+                        value: image,
+                        valid: true
+                    }
+                }
+            };
+        });
     };
 
     placeAddedHandler = () => {
-        if (this.state.placeName.trim() !== '') {
-            this.props.onAddPlace(this.state.placeName);
-        }
-    };
-
-    handleOpen = () => {
-        this.setState({ showNotif: true });
-    };
-
-    handleClose = () => {
-        this.setState({ showNotif: false });
+        this.props.onAddPlace(
+            this.state.controls.placeName.value,
+            this.state.controls.location.value,
+            this.state.controls.image.value
+        );
     };
 
     render() {
         return (
             <ScrollView>
                 <View style={styles.container}>
-                    <PickImage />
-                    <PickLocation />
+                    <MainText>
+                        <HeadingText>Share a Place with us!</HeadingText>
+                    </MainText>
+                    <PickImage onImagePick={this.imagePickedHandler} />
+                    <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput
-                        placeName={this.state.placeName}
-                        onChangeText={this.placeNameChangeHandler}
+                        placeData={this.state.controls.placeName}
+                        onChangeText={this.placeNameChangedHandler}
                     />
                     <View style={styles.button}>
-                        <BackgroundedButton
-                            color="#29aaf4"
-                            bgColor="white"
-                            brColor="#29aaf4"
-                            onPress={this.placeAddedHandler}>
-                            Share The Place
-                        </BackgroundedButton>
+                        <Button
+                            title="Share the Place!"
+                            onPress={this.placeAddedHandler}
+                            disabled={
+                                !this.state.controls.placeName.valid ||
+                                !this.state.controls.location.valid ||
+                                !this.state.controls.image.valid
+                            }
+                        />
                     </View>
                 </View>
             </ScrollView>
@@ -110,7 +167,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddPlace: placeName => dispatch(addPlace(placeName))
+        onAddPlace: (placeName, location, image) =>
+            dispatch(addPlace(placeName, location, image))
     };
 };
 

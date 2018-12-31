@@ -1,15 +1,33 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import BackgroundedButton from '../UI/BackgrounedButton/Button';
-import imagePlaceHolder from '../../assets/beautiful-place.jpg';
+import imagePlaceHolder from '../../assets/placeholder.png';
+import ImagePicker from 'react-native-image-picker';
 
 class PickImage extends Component {
+    state = {
+        pickedImage: null
+    };
+
+    pickImageHandler = () => {
+        ImagePicker.showImagePicker({ title: 'Pick an Image' }, res => {
+            if (res.didCancel) {
+                console.log('User cancelled');
+            } else if (res.error) {
+                console.log('Error :', res.error);
+            } else {
+                this.setState({ pickedImage: { uri: res.uri } });
+                this.props.onImagePick({ uri: res.uri, base64: res.data });
+            }
+        });
+    };
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={[styles.placeholder, { marginTop: 25 }]}>
                     <Image
-                        source={imagePlaceHolder}
+                        source={this.state.pickedImage || imagePlaceHolder}
                         style={styles.previewImage}
                     />
                 </View>
@@ -17,7 +35,8 @@ class PickImage extends Component {
                     <BackgroundedButton
                         color="#29aaf4"
                         bgColor="white"
-                        brColor="#29aaf4">
+                        brColor="#29aaf4"
+                        onPress={this.pickImageHandler}>
                         Pick Image
                     </BackgroundedButton>
                 </View>

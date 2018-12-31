@@ -3,6 +3,7 @@ package com.testapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -58,7 +59,8 @@ public class MainApplication extends NavigationApplication {
   protected List<ReactPackage> getPackages() {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(new VectorIconsPackage(), new MainReactPackage(), new MapsPackage());
+    return Arrays.<ReactPackage>asList(new VectorIconsPackage(), new MainReactPackage(), new MapsPackage(),
+        new ImagePickerPackage());
   }
 
   @Override
