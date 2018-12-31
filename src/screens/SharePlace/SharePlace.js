@@ -6,7 +6,8 @@ import {
     Button,
     StyleSheet,
     ScrollView,
-    Image
+    Image,
+    ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -128,15 +129,19 @@ class SharePlaceScreen extends Component {
                         onChangeText={this.placeNameChangedHandler}
                     />
                     <View style={styles.button}>
-                        <Button
-                            title="Share the Place!"
-                            onPress={this.placeAddedHandler}
-                            disabled={
-                                !this.state.controls.placeName.valid ||
-                                !this.state.controls.location.valid ||
-                                !this.state.controls.image.valid
-                            }
-                        />
+                        {this.props.isLoading ? (
+                            <ActivityIndicator size="large" color="#29aaf4" />
+                        ) : (
+                            <Button
+                                title="Share the Place!"
+                                onPress={this.placeAddedHandler}
+                                disabled={
+                                    !this.state.controls.placeName.valid ||
+                                    !this.state.controls.location.valid ||
+                                    !this.state.controls.image.valid
+                                }
+                            />
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -165,6 +170,12 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         onAddPlace: (placeName, location, image) =>
@@ -173,6 +184,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(SharePlaceScreen);
