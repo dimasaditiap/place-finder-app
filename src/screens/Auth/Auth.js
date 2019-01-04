@@ -9,11 +9,11 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     Keyboard,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 import MainText from '../../components/UI/MainText/MainText';
@@ -86,13 +86,12 @@ class AuthScreen extends Component {
         });
     };
 
-    loginHandler = () => {
+    authHandler = () => {
         const authData = {
             email: this.state.controls.email.value,
             password: this.state.controls.password.value
         };
-        this.props.onLogin(authData);
-        startMainTabs();
+        this.props.onTryAuth(authData, this.state.authMode);
     };
 
     updateInput = (key, value) => {
@@ -249,19 +248,23 @@ class AuthScreen extends Component {
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
-                    <BackgroundedButton
-                        bgColor="#29aaf4"
-                        color="white"
-                        brColor="transparent"
-                        onPress={this.loginHandler}
-                        disabled={
-                            (!this.state.controls.confPassword.valid &&
-                                this.state.authMode === 'signup') ||
-                            !this.state.controls.password.valid ||
-                            !this.state.controls.email.valid
-                        }>
-                        Submit
-                    </BackgroundedButton>
+                    {this.props.isLoading ? (
+                        <ActivityIndicator size="large" color="#29aaf4" />
+                    ) : (
+                        <BackgroundedButton
+                            bgColor="#29aaf4"
+                            color="white"
+                            brColor="transparent"
+                            onPress={this.authHandler}
+                            disabled={
+                                (!this.state.controls.confPassword.valid &&
+                                    this.state.authMode === 'signup') ||
+                                !this.state.controls.password.valid ||
+                                !this.state.controls.email.valid
+                            }>
+                            Submit
+                        </BackgroundedButton>
+                    )}
                 </KeyboardAvoidingView>
             </ImageBackground>
         );
@@ -287,13 +290,19 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: authData => dispatch(tryAuth(authData))
+        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
     };
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(AuthScreen);
