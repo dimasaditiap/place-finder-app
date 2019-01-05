@@ -48,5 +48,5 @@ export const tryAuth = (authData, authMode) => {
 };
 
 export const authSetToken = token => {
-    return { Type: AUTH_SET_TOKEN, token };
+    return { type: AUTH_SET_TOKEN, token };
 };

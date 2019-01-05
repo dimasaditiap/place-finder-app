@@ -2,7 +2,11 @@ import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
 
 export const addPlace = (placeName, location, image) => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        if (!token) {
+            return;
+        }
         dispatch(uiStartLoading());
         fetch(
             'https://us-central1-place-finder-d3f4b.cloudfunctions.net/storeImage',
@@ -26,7 +30,7 @@ export const addPlace = (placeName, location, image) => {
                     image: parsedRes.imageUrl
                 };
                 return fetch(
-                    'https://place-finder-d3f4b.firebaseio.com/places.json',
+                    `https://place-finder-d3f4b.firebaseio.com/places.json?auth=${token}`,
                     {
                         method: 'POST',
                         body: JSON.stringify(placeData)
@@ -47,8 +51,14 @@ export const addPlace = (placeName, location, image) => {
 };
 
 export const getPlaces = () => {
-    return dispatch => {
-        fetch('https://place-finder-d3f4b.firebaseio.com/places.json')
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        if (!token) {
+            return;
+        }
+        fetch(
+            `https://place-finder-d3f4b.firebaseio.com/places.json?auth=${token}`
+        )
             .catch(err => {
                 alert('An error has occured');
             })
@@ -77,9 +87,16 @@ export const setPlaces = places => {
 export const deletePlace = key => {
     return dispatch => {
         dispatch(removePlace(key));
-        fetch(`https://place-finder-d3f4b.firebaseio.com/places/${key}.json`, {
-            method: 'DELETE'
-        })
+        const token = getState().auth.token;
+        if (!token) {
+            return;
+        }
+        fetch(
+            `https://place-finder-d3f4b.firebaseio.com/places/${key}.json?auth=${token}`,
+            {
+                method: 'DELETE'
+            }
+        )
             .catch(err => {
                 alert('An error has occured');
                 console.log(err);
