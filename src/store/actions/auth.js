@@ -1,4 +1,4 @@
-import { TRY_AUTH } from './actionTypes';
+import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
 
@@ -30,7 +30,7 @@ export const tryAuth = (authData, authMode) => {
             .then(parsedRes => {
                 console.log(parsedRes);
                 dispatch(uiStopLoading());
-                if (parsedRes.error) {
+                if (!parsedRes.idToken) {
                     if (parsedRes.error.message === 'EMAIL_EXISTS') {
                         alert('Email exists, please use another email');
                     } else if (parsedRes.error.message === 'INVALID_PASSWORD') {
@@ -39,9 +39,14 @@ export const tryAuth = (authData, authMode) => {
                         alert('Authentication failed, please try again');
                     }
                 } else {
+                    dispatch(authSetToken(parsedRes.idToken));
                     startMainTabs();
                 }
             });
         dispatch(uiStopLoading());
     };
+};
+
+export const authSetToken = token => {
+    return { Type: AUTH_SET_TOKEN, token };
 };
