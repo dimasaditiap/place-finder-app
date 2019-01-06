@@ -14,7 +14,10 @@ export const addPlace = (placeName, location, image) => {
                 method: 'POST',
                 body: JSON.stringify({
                     image: image.base64
-                })
+                }),
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
         )
             .catch(err => {
@@ -85,7 +88,7 @@ export const setPlaces = places => {
 };
 
 export const deletePlace = key => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(removePlace(key));
         const token = getState().auth.token;
         if (!token) {
