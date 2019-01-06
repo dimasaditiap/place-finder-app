@@ -119,9 +119,6 @@ class SharePlaceScreen extends Component {
         return (
             <ScrollView>
                 <View style={styles.container}>
-                    <MainText>
-                        <HeadingText>Share a Place with us!</HeadingText>
-                    </MainText>
                     <PickImage onImagePick={this.imagePickedHandler} />
                     <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput

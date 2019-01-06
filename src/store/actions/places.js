@@ -1,11 +1,39 @@
+import { AsyncStorage } from 'react-native';
+
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
+import { authSetToken } from './auth';
 
 export const addPlace = (placeName, location, image) => {
     return (dispatch, getState) => {
         const token = getState().auth.token;
         if (!token) {
-            return;
+            let fetchedToken;
+            AsyncStorage.getItem('pf:auth:token')
+                .catch(err => {
+                    return;
+                })
+                .then(storedToken => {
+                    if (!storedToken) {
+                        return;
+                    }
+                    fetchedToken = storedToken;
+                    AsyncStorage.getItem('pf:auth:expiryDate').then(
+                        expiryDate => {
+                            const parsedExpiryDate = new Date(
+                                parseInt(expiryDate)
+                            );
+                            const now = new Date();
+                            if (parsedExpiryDate > now) {
+                                dispatch(authSetToken(fetchedToken));
+                                startMainTabs();
+                            } else {
+                                return;
+                            }
+                        }
+                    );
+                    dispatch(authSetToken(storedToken));
+                });
         }
         dispatch(uiStartLoading());
         fetch(
@@ -57,7 +85,32 @@ export const getPlaces = () => {
     return (dispatch, getState) => {
         const token = getState().auth.token;
         if (!token) {
-            return;
+            let fetchedToken;
+            AsyncStorage.getItem('pf:auth:token')
+                .catch(err => {
+                    return;
+                })
+                .then(storedToken => {
+                    if (!storedToken) {
+                        return;
+                    }
+                    fetchedToken = storedToken;
+                    AsyncStorage.getItem('pf:auth:expiryDate').then(
+                        expiryDate => {
+                            const parsedExpiryDate = new Date(
+                                parseInt(expiryDate)
+                            );
+                            const now = new Date();
+                            if (parsedExpiryDate > now) {
+                                dispatch(authSetToken(fetchedToken));
+                                startMainTabs();
+                            } else {
+                                return;
+                            }
+                        }
+                    );
+                    dispatch(authSetToken(storedToken));
+                });
         }
         fetch(
             `https://place-finder-d3f4b.firebaseio.com/places.json?auth=${token}`
@@ -92,7 +145,32 @@ export const deletePlace = key => {
         dispatch(removePlace(key));
         const token = getState().auth.token;
         if (!token) {
-            return;
+            let fetchedToken;
+            AsyncStorage.getItem('pf:auth:token')
+                .catch(err => {
+                    return;
+                })
+                .then(storedToken => {
+                    if (!storedToken) {
+                        return;
+                    }
+                    fetchedToken = storedToken;
+                    AsyncStorage.getItem('pf:auth:expiryDate').then(
+                        expiryDate => {
+                            const parsedExpiryDate = new Date(
+                                parseInt(expiryDate)
+                            );
+                            const now = new Date();
+                            if (parsedExpiryDate > now) {
+                                dispatch(authSetToken(fetchedToken));
+                                startMainTabs();
+                            } else {
+                                return;
+                            }
+                        }
+                    );
+                    dispatch(authSetToken(storedToken));
+                });
         }
         fetch(
             `https://place-finder-d3f4b.firebaseio.com/places/${key}.json?auth=${token}`,

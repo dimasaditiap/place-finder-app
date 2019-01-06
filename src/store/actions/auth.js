@@ -1,3 +1,5 @@
+import { AsyncStorage } from 'react-native';
+
 import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
@@ -39,7 +41,9 @@ export const tryAuth = (authData, authMode) => {
                         alert('Authentication failed, please try again');
                     }
                 } else {
-                    dispatch(authSetToken(parsedRes.idToken));
+                    dispatch(
+                        authStoreToken(parsedRes.idToken, parsedRes.expiresIn)
+                    );
                     startMainTabs();
                 }
             });
@@ -47,6 +51,42 @@ export const tryAuth = (authData, authMode) => {
     };
 };
 
+export const authStoreToken = (token, expiresIn) => {
+    return dispatch => {
+        dispatch(authSetToken(token));
+        const now = new Date();
+        const expiryDate = now.getTime() + expiresIn * 1000;
+        AsyncStorage.setItem('pf:auth:token', token);
+        AsyncStorage.setItem('pf:auth:expiryDate', expiryDate.toString());
+    };
+};
+
 export const authSetToken = token => {
     return { type: AUTH_SET_TOKEN, token };
+};
+
+export const authAutoSignIn = () => {
+    return dispatch => {
+        let fetchedToken;
+        AsyncStorage.getItem('pf:auth:token')
+            .then(storedToken => {
+                if (!storedToken) {
+                    return;
+                }
+                fetchedToken = storedToken;
+                AsyncStorage.getItem('pf:auth:expiryDate').then(expiryDate => {
+                    const parsedExpiryDate = new Date(parseInt(expiryDate));
+                    const now = new Date();
+                    if (parsedExpiryDate > now) {
+                        dispatch(authSetToken(fetchedToken));
+                        startMainTabs();
+                    } else {
+                        return;
+                    }
+                });
+            })
+            .catch(err => {
+                return;
+            });
+    };
 };
