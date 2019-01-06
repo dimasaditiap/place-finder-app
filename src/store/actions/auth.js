@@ -1,8 +1,9 @@
 import { AsyncStorage } from 'react-native';
 
-import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
+import { TRY_AUTH, AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
+import App from '../../../App';
 
 export const tryAuth = (authData, authMode) => {
     return dispatch => {
@@ -88,5 +89,26 @@ export const authAutoSignIn = () => {
             .catch(err => {
                 return;
             });
+    };
+};
+
+export const authClearStorage = () => {
+    return dispatch => {
+        AsyncStorage.removeItem('pf:auth:token');
+        AsyncStorage.removeItem('pf:auth:expiryDate');
+    };
+};
+
+export const authLogout = () => {
+    return dispatch => {
+        dispatch(authClearStorage());
+        App();
+        dispatch(authRemoveToken());
+    };
+};
+
+export const authRemoveToken = () => {
+    return {
+        type: AUTH_REMOVE_TOKEN
     };
 };

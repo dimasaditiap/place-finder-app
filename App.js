@@ -36,12 +36,18 @@ Navigation.registerComponent(
     store,
     Provider
 );
-Navigation.registerComponent('place-finder.SideDrawer', () => SideDrawer);
+Navigation.registerComponent(
+    'place-finder.SideDrawer',
+    () => SideDrawer,
+    store,
+    Provider
+);
 
 // Start a App
-Navigation.startSingleScreenApp({
-    screen: {
-        screen: 'place-finder.AuthScreen',
-        title: 'Login'
-    }
-});
+export default () =>
+    Navigation.startSingleScreenApp({
+        screen: {
+            screen: 'place-finder.AuthScreen',
+            title: 'Login'
+        }
+    });
