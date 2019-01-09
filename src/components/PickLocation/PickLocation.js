@@ -4,17 +4,23 @@ import BackgroundedButton from '../UI/BackgrounedButton/Button';
 import MapView from 'react-native-maps';
 
 class PickLocation extends Component {
-    state = {
-        focusedLoc: {
-            latitude: -6.89148,
-            longitude: 107.6107,
-            latitudeDelta: 0.00522,
-            longitudeDelta:
-                (Dimensions.get('window').width /
-                    Dimensions.get('window').height) *
-                0.00522
-        },
-        chosedLoc: false
+    componentWillMount() {
+        this.reset();
+    }
+
+    reset = () => {
+        this.setState({
+            focusedLoc: {
+                latitude: -6.89148,
+                longitude: 107.6107,
+                latitudeDelta: 0.00522,
+                longitudeDelta:
+                    (Dimensions.get('window').width /
+                        Dimensions.get('window').height) *
+                    0.00522
+            },
+            chosedLoc: false
+        });
     };
 
     pickLocationHandler = event => {
@@ -71,6 +77,9 @@ class PickLocation extends Component {
             <View style={styles.container}>
                 <MapView
                     initialRegion={this.state.focusedLoc}
+                    region={
+                        !this.state.chosedLoc ? this.state.focusedLoc : null
+                    }
                     style={styles.map}
                     onPress={this.pickLocationHandler}
                     ref={ref => (this.map = ref)}>
