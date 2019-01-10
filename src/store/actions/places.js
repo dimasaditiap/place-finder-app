@@ -64,12 +64,19 @@ export const addPlace = (placeName, location, image) => {
                 alert('Something went wrong, please try again!');
                 dispatch(uiStopLoading());
             })
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 const placeData = {
                     name: placeName,
                     location,
-                    image: parsedRes.imageUrl
+                    image: parsedRes.imageUrl,
+                    imagePath: parsedRes.imagePath
                 };
                 return fetch(
                     `https://place-finder-d3f4b.firebaseio.com/places.json?auth=${token}`,
@@ -84,11 +91,22 @@ export const addPlace = (placeName, location, image) => {
                 alert('Something went wrong, please try again!');
                 dispatch(uiStopLoading());
             })
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 console.log(parsedRes);
                 dispatch(uiStopLoading());
                 dispatch(placeAdded());
+            })
+            .catch(err => {
+                console.log(err);
+                alert('Something went wrong, please try again!');
+                dispatch(uiStopLoading());
             });
     };
 };
@@ -136,7 +154,13 @@ export const getPlaces = () => {
             .catch(err => {
                 alert('An error has occured');
             })
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 const places = [];
                 for (let key in parsedRes) {
@@ -147,6 +171,9 @@ export const getPlaces = () => {
                     });
                 }
                 dispatch(setPlaces(places));
+            })
+            .catch(err => {
+                alert('An error has occured');
             });
     };
 };
@@ -200,9 +227,19 @@ export const deletePlace = key => {
                 alert('An error has occured');
                 console.log(err);
             })
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 console.log('Done!');
+            })
+            .catch(err => {
+                alert('An error has occured');
+                console.log(err);
             });
     };
 };

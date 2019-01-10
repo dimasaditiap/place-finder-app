@@ -15,9 +15,6 @@ admin.initializeApp({
     credential: admin.credential.cert(require('./place-finder.json'))
 });
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
 exports.storeImage = functions.https.onRequest((request, response) => {
     cors(request, response, () => {
         if (
@@ -60,7 +57,8 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                                     bucket.name
                                 }/o/${encodeURIComponent(
                                     file.name
-                                )}?alt=media&token=${uuid}`
+                                )}?alt=media&token=${uuid}`,
+                                imagePath: `/places/${uuid}.jpg`
                             });
                         } else {
                             console.log(err);
@@ -77,3 +75,13 @@ exports.storeImage = functions.https.onRequest((request, response) => {
             });
     });
 });
+
+exports.deleteImage = functions.database
+    .ref('/places/{placeId}')
+    .onDelete(event => {
+        const placeData = event.data.previous.val();
+        const imagePath = placeData.imagePath;
+
+        const bucket = gcs.bucket('place-finder-d3f4b.appspot.com');
+        return bucket.file(imagePath).delete();
+    });
