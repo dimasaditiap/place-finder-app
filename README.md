@@ -1,13 +1,14 @@
 # Place Finder App
 
----
 
 An application that can be used to share or find exciting places around the world. Powered by Google Maps API and built with React Native.
 
 #### Get the APK
 
 You can get the APK from [here](https://drive.google.com/file/d/1FzW9yIXclL4BA3Jo4QO0uJFnWq8kgpH8/view).
+
 Simply install it in your Android device by double clicking it.
+
 (Side Note : This project should be working on iOS too but I haven't got anychances to do it since I don't use iOS product)
 
 #### How To Run
@@ -19,10 +20,10 @@ Simply install it in your Android device by double clicking it.
 
 #### Screenshots
 
-[](screenshots/pf-ss0.jpg)
+<img src="screenshots/pf-ss0.jpg" alt="SS1" width="400"/>
 
-[](screenshots/pf-ss1.jpg)
+<img src="screenshots/pf-ss1.jpg" alt="SS2" width="400"/>
 
-[](screenshots/pf-ss2.jpg)
+<img src="screenshots/pf-ss2.jpg" alt="SS3" width="400"/>
 
-[](screenshots/pf-ss3.jpg)
+<img src="screenshots/pf-ss3.jpg" alt="SS4" width="400"/>
