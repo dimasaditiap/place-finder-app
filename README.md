@@ -21,8 +21,8 @@ Simply install it in your Android device by double clicking it.
 
 <img src="screenshots/pf-ss0.jpg" alt="SS1" width="400"/>
 
-<img src="screenshots/pf-ss1.jpg" alt="SS2" width="400"/>
+<img src="screenshots/pf-ss2.jpg" alt="SS2" width="400"/>
 
-<img src="screenshots/pf-ss2.jpg" alt="SS3" width="400"/>
+<img src="screenshots/pf-ss1.jpg" alt="SS3" width="400"/>
 
 <img src="screenshots/pf-ss3.jpg" alt="SS4" width="400"/>
